@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import teste.desenvolvedor.backend.java.santander.api.v1.dto.ClienteDTO;
+import teste.desenvolvedor.backend.java.santander.exceptions.ClienteObrigatorioException;
 import teste.desenvolvedor.backend.java.santander.exceptions.ValorNegativoOuZeroException;
 import teste.desenvolvedor.backend.java.santander.api.v1.mapper.ClienteMapper;
 import teste.desenvolvedor.backend.java.santander.model.Cliente;
@@ -70,9 +71,9 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente depositar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
+    public Cliente depositar(final Cliente pCliente, final BigDecimal pValor) {
 
-	validarValor(pValor);
+	validarValores(pCliente, pValor);
 
 	pCliente.setSaldoAnterior(pCliente.getSaldo());
 
@@ -154,11 +155,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente sacar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
+    public Cliente sacar(final Cliente pCliente, final BigDecimal pValor) {
 
 	BigDecimal valorTaxado;
 
-	validarValor(pValor);
+	validarValores(pCliente, pValor);
 
 	pCliente.setSaldoAnterior(pCliente.getSaldo());
 
@@ -232,7 +233,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
-    private void validarValor(final BigDecimal pValor) throws ValorNegativoOuZeroException {
+    private void validarValores(final Cliente pCliente, final BigDecimal pValor) {
+
+	if (pCliente == null) {
+
+	    throw new ClienteObrigatorioException("Cliente inexistente ou não informado");
+
+	}
 
 	if (BigDecimalUtil.ehMenorOuIgualA(pValor, BigDecimal.ZERO)) {
 
