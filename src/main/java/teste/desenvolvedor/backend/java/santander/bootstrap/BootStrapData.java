@@ -6,8 +6,7 @@ import teste.desenvolvedor.backend.java.santander.model.Cliente;
 import teste.desenvolvedor.backend.java.santander.model.Transacao;
 import teste.desenvolvedor.backend.java.santander.repositories.ClienteRepository;
 import teste.desenvolvedor.backend.java.santander.repositories.TransacaoRepository;
-import teste.desenvolvedor.backend.java.santander.services.ClienteService;
-import teste.desenvolvedor.backend.java.santander.services.TransacaoService;
+import teste.desenvolvedor.backend.java.santander.util.DadosAleatoriosUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,7 +29,18 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(final String... args) throws Exception {
 
-	Cliente cliente1 = Cliente.builder().pDataNascimento(LocalDate.of(1982, Month.FEBRUARY, 27)).pNome("Rodrigo")
+	Cliente cliente;
+
+	for (int i = 0; i <= 100; i++) {
+
+	    cliente = Cliente.builder().pDataNascimento(DadosAleatoriosUtil.getDataAleatoria()).pNome("TESTE " + i).pNumeroConta(i + "-0").pPlanoExclusivo(true)
+			    .pSaldo(DadosAleatoriosUtil.getValorAleatorio()).build();
+
+	    clienteRepository.save(cliente);
+
+	}
+
+	Cliente cliente1 = Cliente.builder().pDataNascimento(LocalDate.of(1982, Month.FEBRUARY, 27)).pNome("TESTE")
 			.pNumeroConta("111111-1").pPlanoExclusivo(true).pSaldo(new BigDecimal(100)).build();
 
 	clienteRepository.save(cliente1);

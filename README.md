@@ -1,9 +1,11 @@
 # Teste Desenvolvedor Backend (Java)
 
 Olá, seja bem-vindo ao desafio para desenvolvedor backend Java do Banco Santander, o foco desta etapa é testar seus conhecimentos técnicos em desenvolvimento de API's de acordo com o escopo abaixo:
+
 ```diff
 - Para facilitar a execução do projeto pedimos que seja utilizado a dependência h2 como banco de dados em memória e que forneça uma carga prévia de dados junto ao projeto.
 ```
+
 O tema do projeto fictício é um Internet Banking, o projeto precisa ter as seguintes funcionalidades:
 
 - Cadastrar um cliente que contenha os atributos abaixo:
@@ -20,12 +22,12 @@ O tema do projeto fictício é um Internet Banking, o projeto precisa ter as seg
 
 - Sacar um valor que subtrai o saldo do cliente contando uma taxa de administração conforme a tabela abaixo:
 
-| Valor | Taxa de administração |
-| --- | --- |
-| VALOR <= 100,00 | Isento de taxa de saque |
+| Valor                         | Taxa de administração |
+|-------------------------------| --- |
+| VALOR <= 100,00               | Isento de taxa de saque |
 | VALOR > 100,00 E VALOR <= 300 | Taxa de 0.4% |
-| VALOR > 300,00 | Taxa de 1% |
-| Plano exclusive? | Isento de taxa de saque |
+| VALOR > 300,00                | Taxa de 1% |
+| Plano exclusivo?              | Isento de taxa de saque |
 
 - Depositar um valor que aumenta o saldo de um determinado cliente
 
