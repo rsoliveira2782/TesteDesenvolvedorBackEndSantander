@@ -17,9 +17,9 @@ public class DadosAleatoriosUtil {
 
     private static MathContext mc = new MathContext(2); // Precisão duas casas decimais
 
-    public static BigDecimal valorInicial = new BigDecimal(0, mc);
+    public static BigDecimal valorInicial = new BigDecimal(-1000, mc);
 
-    public static BigDecimal valorFinal = new BigDecimal(1000000, mc);
+    public static BigDecimal valorFinal = new BigDecimal(1000, mc);
 
     private Random r = new Random();
 

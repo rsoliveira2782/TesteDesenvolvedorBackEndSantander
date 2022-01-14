@@ -1,5 +1,9 @@
 package teste.desenvolvedor.backend.java.santander.services.impl;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import teste.desenvolvedor.backend.java.santander.api.v1.dto.ClienteDTO;
 import teste.desenvolvedor.backend.java.santander.exceptions.ValorNegativoOuZeroException;
@@ -18,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -30,11 +35,23 @@ public class ClienteServiceImpl implements ClienteService {
 
     private MathContext mc = new MathContext(2); // Precisão duas casas decimais
 
+    @Value("${teste.desenvolvedor.backend.java.santander.tamanhoPagina}")
+    private int tamanhoPagina;
+
     public ClienteServiceImpl(final ClienteRepository pClienteRepository, final TransacaoRepository pTransacaoRepository, final ClienteMapper pClienteMapper) {
 
 	clienteRepository = pClienteRepository;
 	transacaoRepository = pTransacaoRepository;
 	clienteMapper = pClienteMapper;
+
+    }
+
+    @Override
+    public ClienteDTO criarCliente(final ClienteDTO pClienteDTO) {
+
+	pClienteDTO.setSaldoAnterior(pClienteDTO.getSaldo());
+
+	return saveAndReturnDTO(clienteMapper.clienteDtoTOCliente(pClienteDTO));
 
     }
 
@@ -89,17 +106,31 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
 
+    @Override public ClienteDTO getClienteById(final Long pId) {
+
+	return clienteMapper.clienteToClienteDTO(clienteRepository.findById(pId).orElse(null));
+
+    }
+
     @Override
-    public List<ClienteDTO> getClientes() {
+    public List<ClienteDTO> getClientes(final int pNumeroPagina) {
 
-	List<ClienteDTO> clientes = new ArrayList<>();
+	Pageable paginacao = PageRequest.of(pNumeroPagina, tamanhoPagina);
 
-	clienteRepository.findAll().forEach(pCliente -> {
-	    ClienteDTO clienteDTO = clienteMapper.clienteToClienteDTO(pCliente);
-	    clientes.add(clienteDTO);
-	});
+	Page<Cliente> resultadoPaginado = clienteRepository.findAll(paginacao);
 
-	return clientes;
+	if (resultadoPaginado.hasContent()) {
+	    return resultadoPaginado.getContent().stream()
+			    .map(pCliente -> {
+				ClienteDTO clienteDTO = clienteMapper.clienteToClienteDTO(pCliente);
+				return clienteDTO;
+			    })
+			    .collect(Collectors.toList());
+	} else {
+
+	    return new ArrayList<>();
+
+	}
 
     }
 
@@ -150,6 +181,16 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente save(final Cliente object) {
 
 	return clienteRepository.save(object);
+
+    }
+
+    private ClienteDTO saveAndReturnDTO(Cliente pCliente) {
+
+	Cliente cliente = clienteRepository.save(pCliente);
+
+	ClienteDTO returnDto = clienteMapper.clienteToClienteDTO(cliente);
+
+	return returnDto;
 
     }
 

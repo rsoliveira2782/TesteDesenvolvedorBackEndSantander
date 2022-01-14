@@ -14,9 +14,7 @@ import teste.desenvolvedor.backend.java.santander.repositories.TransacaoReposito
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

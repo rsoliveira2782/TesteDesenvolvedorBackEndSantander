@@ -30,35 +30,32 @@ public class BootStrapData implements CommandLineRunner {
     public void run(final String... args) throws Exception {
 
 	Cliente cliente;
+	Transacao transacao;
 
-	for (int i = 0; i <= 100; i++) {
+	String operacao;
+
+	for (int i = 1; i <= 50; i++) {
 
 	    cliente = Cliente.builder().pDataNascimento(DadosAleatoriosUtil.getDataAleatoria()).pNome("TESTE " + i).pNumeroConta(i + "-0").pPlanoExclusivo(true)
 			    .pSaldo(DadosAleatoriosUtil.getValorAleatorio()).build();
 
 	    clienteRepository.save(cliente);
 
+	    for (int j = 1; j <= 5.; j++) {
+
+		operacao = j % 2 == 0 ? "saque" : "deposito";
+
+		transacao = Transacao.builder().pTipo(operacao).pData(LocalDate.now()).pCliente(cliente).pValor(DadosAleatoriosUtil.getValorAleatorio()).build();
+
+		transacaoRepository.save(transacao);
+
+		cliente.getTransacoes().add(transacao);
+
+	    }
+
+	    clienteRepository.save(cliente);
+
 	}
-
-	Cliente cliente1 = Cliente.builder().pDataNascimento(LocalDate.of(1982, Month.FEBRUARY, 27)).pNome("TESTE")
-			.pNumeroConta("111111-1").pPlanoExclusivo(true).pSaldo(new BigDecimal(100)).build();
-
-	clienteRepository.save(cliente1);
-
-	Transacao transacao1 = Transacao.builder().pTipo("saque").pData(LocalDate.now()).pCliente(cliente1).pValor(new BigDecimal(10)).build();
-	Transacao transacao2 = Transacao.builder().pTipo("deposito").pData(LocalDate.now()).pCliente(cliente1).pValor(new BigDecimal(15)).build();
-
-	transacaoRepository.save(transacao1);
-	transacaoRepository.save(transacao2);
-
-	cliente1.getTransacoes().add(transacao1);
-	cliente1.getTransacoes().add(transacao2);
-
-	clienteRepository.save(cliente1);
-
-	System.out.println("Populando dados no BootStrap");
-	System.out.println("Quantidade de clientes cadastrados: " + clienteRepository.count());
-	System.out.println("Quantidade de transações cadastradas: " + transacaoRepository.count());
 
     }
 }

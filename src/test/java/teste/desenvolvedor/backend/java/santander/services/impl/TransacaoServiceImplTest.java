@@ -1,25 +1,25 @@
 package teste.desenvolvedor.backend.java.santander.services.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import teste.desenvolvedor.backend.java.santander.repositories.TransacaoRepository;
-import teste.desenvolvedor.backend.java.santander.services.TransacaoService;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(MockitoExtension.class)
 class TransacaoServiceImplTest {
 
     @Mock
     TransacaoRepository transacaoRepository;
 
-    TransacaoService transacaoService;
+    @Autowired
+    @InjectMocks
+    TransacaoServiceImpl transacaoServiceImpl;
 
     @BeforeEach
     void setUp() {
-
-	MockitoAnnotations.openMocks(this);
-	transacaoService = new TransacaoServiceImpl(transacaoRepository);
 
     }
 }

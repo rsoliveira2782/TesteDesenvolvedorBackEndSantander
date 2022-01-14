@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import teste.desenvolvedor.backend.java.santander.api.v1.dto.ClienteDTO;
 import teste.desenvolvedor.backend.java.santander.model.Cliente;
 
-@Mapper
+@Mapper(uses = TransacaoMapper.class)
 public interface ClienteMapper {
 
     ClienteMapper INSTANCE = Mappers.getMapper(ClienteMapper.class);
