@@ -8,9 +8,7 @@ import teste.desenvolvedor.backend.java.santander.repositories.ClienteRepository
 import teste.desenvolvedor.backend.java.santander.repositories.TransacaoRepository;
 import teste.desenvolvedor.backend.java.santander.util.DadosAleatoriosUtil;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
+import java.util.HashSet;
 
 @Component
 public class BootStrapData implements CommandLineRunner {
@@ -36,8 +34,7 @@ public class BootStrapData implements CommandLineRunner {
 
 	for (int i = 1; i <= 50; i++) {
 
-	    cliente = Cliente.builder().pDataNascimento(DadosAleatoriosUtil.getDataAleatoria()).pNome("TESTE " + i).pNumeroConta(i + "-0").pPlanoExclusivo(true)
-			    .pSaldo(DadosAleatoriosUtil.getValorAleatorio()).build();
+	    cliente = new Cliente(DadosAleatoriosUtil.getDataAleatoria(), "TESTE " + i, i + "-0", true, DadosAleatoriosUtil.getValorAleatorio(), null, new HashSet<>());
 
 	    clienteRepository.save(cliente);
 
@@ -45,7 +42,7 @@ public class BootStrapData implements CommandLineRunner {
 
 		operacao = j % 2 == 0 ? "saque" : "deposito";
 
-		transacao = Transacao.builder().pTipo(operacao).pData(LocalDate.now()).pCliente(cliente).pValor(DadosAleatoriosUtil.getValorAleatorio()).build();
+		transacao = new Transacao(cliente, DadosAleatoriosUtil.getDataAleatoria(), operacao, DadosAleatoriosUtil.getValorAleatorio());
 
 		transacaoRepository.save(transacao);
 

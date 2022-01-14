@@ -15,6 +15,7 @@ import teste.desenvolvedor.backend.java.santander.repositories.TransacaoReposito
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,8 +49,7 @@ class ClienteServiceImplTest {
     @Test
     void depositar() {
 
-	clienteDeposito = Cliente.builder().pDataNascimento(LocalDate.now()).pNome("CLIENTE DEPOSITO")
-			.pNumeroConta("111111-1").pPlanoExclusivo(true).pSaldo(new BigDecimal(100.00)).build();
+	clienteDeposito = new Cliente(LocalDate.now(), "CLIENTE DEPOSITO", "111111-1", true, new BigDecimal(100.00), null, new HashSet<>());
 
 	when(clienteRepository.save(any())).thenReturn(clienteDeposito);
 	clienteServiceImpl.save(clienteDeposito);
@@ -64,40 +64,37 @@ class ClienteServiceImplTest {
     @Test
     void sacarComIsencaoDeTaxaPorPlanoExclusivo() {
 
-	clienteIsentoPorPlano = Cliente.builder().pDataNascimento(LocalDate.now()).pNome("CLIENTE ISENTO POR PLANO EXCLUSIVO")
-			.pNumeroConta("111111-1").pPlanoExclusivo(true).pSaldo(new BigDecimal(100.00)).build();
+	clienteIsentoPorPlano = new Cliente(LocalDate.now(), "CLIENTE ISENTO POR PLANO EXCLUSIVO", "111111-1", true, new BigDecimal(100.00, mc), null, new HashSet<>());
 
 	when(clienteRepository.save(any())).thenReturn(clienteIsentoPorPlano);
 	clienteServiceImpl.save(clienteIsentoPorPlano);
 
-	clienteServiceImpl.sacar(clienteIsentoPorPlano, new BigDecimal(400.00));
+	clienteServiceImpl.sacar(clienteIsentoPorPlano, new BigDecimal(400.00, mc));
 
-	assertEquals(new BigDecimal(100.00), clienteIsentoPorPlano.getSaldoAnterior());
-	assertEquals(new BigDecimal(-300.00), clienteIsentoPorPlano.getSaldo());
+	assertEquals(new BigDecimal(100.00, mc), clienteIsentoPorPlano.getSaldoAnterior());
+	assertEquals(new BigDecimal(-300.00, mc), clienteIsentoPorPlano.getSaldo());
 
     }
 
     @Test
     void sacarComIsencaoDeTaxaPorValor() {
 
-	clienteIsentoPorValor = Cliente.builder().pDataNascimento(LocalDate.now()).pNome("CLIENTE ISENTO POR VALOR")
-			.pNumeroConta("111111-1").pPlanoExclusivo(false).pSaldo(new BigDecimal(100.00)).build();
+	clienteIsentoPorValor = new Cliente(LocalDate.now(), "CLIENTE ISENTO POR VALOR", "111111-1", false, new BigDecimal(100.00, mc), null, new HashSet<>());
 
 	when(clienteRepository.save(any())).thenReturn(clienteIsentoPorValor);
 	clienteServiceImpl.save(clienteIsentoPorValor);
 
-	clienteServiceImpl.sacar(clienteIsentoPorValor, new BigDecimal(10.00));
+	clienteServiceImpl.sacar(clienteIsentoPorValor, new BigDecimal(10.00, mc));
 
-	assertEquals(new BigDecimal(100.00), clienteIsentoPorValor.getSaldoAnterior());
-	assertEquals(new BigDecimal(90.00), clienteIsentoPorValor.getSaldo());
+	assertEquals(new BigDecimal(100.00, mc), clienteIsentoPorValor.getSaldoAnterior());
+	assertEquals(new BigDecimal(90.00, mc), clienteIsentoPorValor.getSaldo());
 
     }
 
     @Test
     void sacarComTaxa04Porcento() {
 
-	clienteTaxa04Porcento = Cliente.builder().pDataNascimento(LocalDate.now()).pNome("CLIENTE TAXA DE 0.4 PORCENTO")
-			.pNumeroConta("111111-1").pPlanoExclusivo(false).pSaldo(new BigDecimal(100.00, mc)).build();
+	clienteTaxa04Porcento = new Cliente(LocalDate.now(), "CLIENTE TAXA DE 0.4 PORCENTO", "111111-1", false, new BigDecimal(100.00, mc), null, new HashSet<>());
 
 	when(clienteRepository.save(any())).thenReturn(clienteTaxa04Porcento);
 	clienteServiceImpl.save(clienteTaxa04Porcento);
@@ -112,8 +109,7 @@ class ClienteServiceImplTest {
     @Test
     void sacarComTaxa1Porcento() {
 
-	clienteTaxa1Porcento = Cliente.builder().pDataNascimento(LocalDate.now()).pNome("CLIENTE TAXA DE 1 PORCENTO")
-			.pNumeroConta("111111-1").pPlanoExclusivo(false).pSaldo(new BigDecimal(100.00, mc)).build();
+	clienteTaxa1Porcento = new Cliente(LocalDate.now(), "CLIENTE TAXA DE 1 PORCENTO", "111111-1", false, new BigDecimal(100.00, mc), null, new HashSet<>());
 
 	when(clienteRepository.save(any())).thenReturn(clienteTaxa1Porcento);
 	clienteServiceImpl.save(clienteTaxa1Porcento);

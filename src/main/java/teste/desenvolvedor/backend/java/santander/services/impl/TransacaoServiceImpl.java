@@ -73,7 +73,9 @@ public class TransacaoServiceImpl implements TransacaoService {
 
 	Pageable paginacao = PageRequest.of(pNumeroPagina, tamanhoPagina);
 
-	Transacao exemplo = Transacao.builder().pTipo(pTipo).pData(pData).build();
+	Transacao exemplo = new Transacao();
+	exemplo.setTipo(pTipo);
+	exemplo.setData(pData);
 
 	Page<Transacao> resultadoPaginado = transacaoRepository.findAll(Example.of(exemplo), paginacao);
 

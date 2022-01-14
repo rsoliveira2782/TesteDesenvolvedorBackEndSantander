@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Transacao extends BaseEntity {
 
@@ -22,13 +23,4 @@ public class Transacao extends BaseEntity {
 
     private BigDecimal valor;
 
-    @Builder
-    public Transacao(Cliente pCliente, LocalDate pData, String pTipo, BigDecimal pValor) {
-
-	cliente = pCliente;
-	data = pData;
-	tipo = pTipo;
-	valor = pValor;
-
-    }
 }

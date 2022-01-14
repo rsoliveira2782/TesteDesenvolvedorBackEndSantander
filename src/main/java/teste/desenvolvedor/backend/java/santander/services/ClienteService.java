@@ -11,12 +11,16 @@ public interface ClienteService extends CrudService<Cliente, Long> {
 
     public ClienteDTO criarCliente(final ClienteDTO pClienteDTO);
 
-    public void depositar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException;
+    public Cliente depositar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException;
+
+    public ClienteDTO depositarValor(final Long pIdCliente, final BigDecimal pValor);
 
     public ClienteDTO getClienteById(final Long pId);
 
     public List<ClienteDTO> getClientes(final int pNumeroPagina);
 
-    public void sacar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException;
+    public Cliente sacar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException;
+
+    public ClienteDTO sacarValor(final Long pIdCliente, final BigDecimal pValor);
 
 }

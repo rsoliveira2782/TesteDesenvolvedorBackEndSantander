@@ -6,6 +6,8 @@ import teste.desenvolvedor.backend.java.santander.api.v1.dto.ClienteDTO;
 import teste.desenvolvedor.backend.java.santander.api.v1.dto.ClienteListDTO;
 import teste.desenvolvedor.backend.java.santander.services.ClienteService;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping(ClienteController.BASE_URL)
 public class ClienteController {
@@ -28,6 +30,14 @@ public class ClienteController {
 
     }
 
+    @PostMapping(path = { "/{id}/depositar" })
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteDTO depositar(@PathVariable Long id, @RequestParam BigDecimal valor) {
+
+	return clienteService.depositarValor(id, valor);
+
+    }
+
     @GetMapping({ "/{id}" })
     @ResponseStatus(HttpStatus.OK)
     public ClienteDTO getClienteById(@PathVariable Long id) {
@@ -41,6 +51,14 @@ public class ClienteController {
     public ClienteListDTO getClientes(@RequestParam(defaultValue = "0") Integer pagina) {
 
 	return new ClienteListDTO(clienteService.getClientes(pagina));
+
+    }
+
+    @PostMapping(path = { "/{id}/sacar" })
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteDTO sacar(@PathVariable Long id, @RequestParam BigDecimal valor) {
+
+	return clienteService.sacarValor(id, valor);
 
     }
 

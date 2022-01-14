@@ -70,7 +70,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void depositar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
+    public Cliente depositar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
 
 	validarValor(pValor);
 
@@ -78,13 +78,32 @@ public class ClienteServiceImpl implements ClienteService {
 
 	pCliente.setSaldo(pCliente.getSaldo().add(pValor));
 
-	Transacao transacao = Transacao.builder().pTipo("deposito").pData(LocalDate.now()).pCliente(pCliente).pValor(pValor).build();
+	Transacao transacao = new Transacao(pCliente, LocalDate.now(), "deposito", pValor);
 
 	transacaoRepository.save(transacao);
 
 	pCliente.getTransacoes().add(transacao);
 
-	clienteRepository.save(pCliente);
+	return clienteRepository.save(pCliente);
+
+    }
+
+    @Override
+    public ClienteDTO depositarValor(final Long pIdCliente, final BigDecimal pValor) {
+
+	Cliente cliente = clienteRepository.findById(pIdCliente).orElse(null);
+
+	if (cliente != null) {
+
+	    cliente = depositar(cliente, pValor);
+
+	    ClienteDTO returnDto = clienteMapper.clienteToClienteDTO(cliente);
+
+	    return returnDto;
+
+	}
+
+	return null;
 
     }
 
@@ -135,7 +154,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void sacar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
+    public Cliente sacar(final Cliente pCliente, final BigDecimal pValor) throws ValorNegativoOuZeroException {
 
 	BigDecimal valorTaxado;
 
@@ -167,13 +186,32 @@ public class ClienteServiceImpl implements ClienteService {
 
 	}
 
-	Transacao transacao = Transacao.builder().pTipo("saque").pData(LocalDate.now()).pCliente(pCliente).pValor(pValor).build();
+	Transacao transacao = new Transacao(pCliente, LocalDate.now(), "saque", pValor);
 
 	transacaoRepository.save(transacao);
 
 	pCliente.getTransacoes().add(transacao);
 
-	clienteRepository.save(pCliente);
+	return clienteRepository.save(pCliente);
+
+    }
+
+    @Override
+    public ClienteDTO sacarValor(final Long pIdCliente, final BigDecimal pValor) {
+
+	Cliente cliente = clienteRepository.findById(pIdCliente).orElse(null);
+
+	if (cliente != null) {
+
+	    cliente = sacar(cliente, pValor);
+
+	    ClienteDTO returnDto = clienteMapper.clienteToClienteDTO(cliente);
+
+	    return returnDto;
+
+	}
+
+	return null;
 
     }
 

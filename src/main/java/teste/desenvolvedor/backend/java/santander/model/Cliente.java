@@ -34,16 +34,4 @@ public class Cliente extends BaseEntity {
     @JoinColumn(name = "cliente_id")
     private Set<Transacao> transacoes = new HashSet<>();
 
-    @Builder
-    public Cliente(LocalDate pDataNascimento, String pNome, String pNumeroConta, boolean pPlanoExclusivo, BigDecimal pSaldo) {
-
-	dataNascimento = pDataNascimento;
-	nome = pNome;
-	numeroConta = pNumeroConta;
-	planoExclusivo = pPlanoExclusivo;
-	saldo = pSaldo;
-	saldoAnterior = pSaldo;
-
-    }
-
 }
